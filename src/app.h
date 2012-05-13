@@ -6,6 +6,9 @@
 #ifdef TARGET_OSX
   #include "ofxAlphaVideoPlayer.h"
 #endif
+#include "sxDynaRect.h"
+#include <list>
+
 
 class boxWindow: public ofxFensterListener {
 public:
@@ -71,4 +74,7 @@ public:
   #endif
 	ofxMpplrController con;
 	ofxMpplrScreen buf;
+  
+  list<sxDynaRect> _steps;
+
 };

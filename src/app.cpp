@@ -1,6 +1,7 @@
 #include "app.h"
 
 
+
 //--------------------------------------------------------------
 void App::setup(){
 	ofEnableBlendMode(OF_BLENDMODE_ALPHA);
@@ -27,6 +28,14 @@ void App::setup(){
     _Incrust.setPixelFormat(OF_PIXELS_BGRA);
   #endif
   
+  
+  
+  for (int i = 0; i < 960; i+=50){
+    _steps.push_back(sxDynaRect(0, i, 1280, 50, ofColor(0xFF0099), ofColor(0x000000)) );
+  }
+
+  
+  
 }
 
 //--------------------------------------------------------------
@@ -40,14 +49,16 @@ void App::draw(){
 	//You can draw anything between Begin(); and End();
 	buf.Begin();
     //glClearColor(0, 0, 0, 1.0f);
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     ofEnableAlphaBlending();
-    _Movie.draw(0,0);
+      //_Movie.draw(0,0);
     ofDisableAlphaBlending();
-    /*ofSetHexColor(0xFF0000);
-    for (int i = 0; i < 960; i+=30){
-      ofRect(0, ofGetFrameNum()%30+i, 1280, 10);
-    }*/
+  list<sxDynaRect>::iterator it =_steps.begin();
+	while(it!=_steps.end()) {
+		it->draw();
+		++it;
+	}
+
 	buf.End();
 		
 	ofSetHexColor(0xFFFFFF);

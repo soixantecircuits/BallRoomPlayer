@@ -20,20 +20,22 @@ public:
   GLfloat _width;
   GLfloat _height;
   ofPoint _pos;
+  ofColor _colorOn;
+  ofColor _colorOff;
   
   sxDynaRect();
-  sxDynaRect(GLfloat x, GLfloat y, GLfloat width, GLfloat height);
+  sxDynaRect(GLfloat x, GLfloat y, GLfloat width, GLfloat height, ofColor colorOn, ofColor colorOff);
   ~sxDynaRect();
   
 	//Setup params and call frame buffer allocation
 	void setup(int width,int height);
   void draw();
-	void draw(float x,float y);
   
+  bool isActive();
 	//Other sub functions
 	void setPos(ofPoint pos2D);
 	ofPoint getPos();
-	void setActive();
+	void setActive(bool state);
   void update();
   
   	
