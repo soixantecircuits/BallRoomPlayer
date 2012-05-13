@@ -1,5 +1,5 @@
 #include "ofMain.h"
-#include "App.h"
+#include "app.h"
 #include "ofxFensterManager.h"
 #include "ofAppGlutWindow.h"
 
