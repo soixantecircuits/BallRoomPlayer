@@ -1,4 +1,5 @@
 #include "app.h"
+#define PORT 12444
 
 
 
@@ -9,6 +10,8 @@ void App::setup(){
 	ofSetVerticalSync(true);
 	
   
+  //Setup OSC
+  receiver.setup( PORT);  
   
 	//ofxMpplr Initialize
 	buf.setup(1280, 960);
@@ -39,7 +42,20 @@ void App::setup(){
 }
 
 //--------------------------------------------------------------
+void App::checkForOscMessages(){
+  while (receiver.hasWaitingMessages()){
+    ofxOscMessage m;
+    receiver.getNextMessage(&m);
+    if (m.getAddress() == "/ballroom/bounce/"){
+      int stair = m.getArgAsInt32(0);
+      cout << "A ball hit stair #" << stair << endl;
+    }
+  }
+}
+
+//--------------------------------------------------------------
 void App::update(){
+  checkForOscMessages();
   _Movie.update();
 }
 
