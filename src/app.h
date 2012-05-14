@@ -65,11 +65,12 @@ class App : public ofBaseApp{
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-
+    void setSteps(int num);
 
     void checkForOscMessages();
-    ofxOscReceiver            receiver;
-    ofVideoPlayer _Movie;
+  
+    ofxOscReceiver  receiver;
+    ofVideoPlayer   _Movie;
 
 #ifdef TARGET_OSX
     ofxAlphaVideoPlayer      _Incrust;

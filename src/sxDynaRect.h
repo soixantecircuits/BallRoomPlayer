@@ -22,6 +22,8 @@ public:
   ofPoint _pos;
   ofColor _colorOn;
   ofColor _colorOff;
+  ofColor _activeColor;
+  int _timeActive;
   
   sxDynaRect();
   sxDynaRect(GLfloat x, GLfloat y, GLfloat width, GLfloat height, ofColor colorOn, ofColor colorOff);
@@ -36,6 +38,8 @@ public:
 	void setPos(ofPoint pos2D);
 	ofPoint getPos();
 	void setActive(bool state);
+	void setActive(bool state, int count, ofColor aColor);
+  void setActiveColor(ofColor aColor);
   void update();
   
   	

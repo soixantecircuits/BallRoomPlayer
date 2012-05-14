@@ -20,6 +20,9 @@ sxDynaRect::sxDynaRect(GLfloat x, GLfloat y, GLfloat width, GLfloat height, ofCo
   _height = height;
   _colorOn.set(colorOn);
   _colorOff.set(colorOff);
+  _isActive = false;
+  _activeColor.set(colorOff);
+  _timeActive = 50;
 }
 
 
@@ -31,7 +34,15 @@ void sxDynaRect::setup(int width, int height){
 
 void sxDynaRect::update(){
   if(isActive()){
+    //_activeColor.set(_colorOn);
+    _timeActive--;
     
+    if(_timeActive < 0){
+      _timeActive = 50;
+      _isActive = false;
+    }
+  }else{
+    _activeColor.set(_colorOff);
   }
 }
 
@@ -40,6 +51,10 @@ bool sxDynaRect::isActive(){
 }
 
 void sxDynaRect::draw(){
+  ofSetColor(_activeColor);
+ // ofSetHexColor(0xFF0000);
+
+  //cout << "_activeColor.getHex() : " << _activeColor.getHex() << endl;
   ofRect(_pos, _width, _height);
 }
 
@@ -55,7 +70,15 @@ void sxDynaRect::setActive(bool state){
   _isActive = state;
 }
 
+void sxDynaRect::setActive(bool state, int count, ofColor aColor){
+  _timeActive = count;
+  _isActive = state;
+  _activeColor.set(aColor);
+}
 
+void sxDynaRect::setActiveColor(ofColor aColor){
+  _activeColor.set(aColor);
+}
 
 sxDynaRect::~sxDynaRect(){
 
