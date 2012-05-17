@@ -14,36 +14,39 @@
 
 
 class sxDynaRect{
-public:
-	
-  bool    _isActive;
-  GLfloat _width;
-  GLfloat _height;
-  ofPoint _pos;
-  ofColor _colorOn;
-  ofColor _colorOff;
-  ofColor _activeColor;
-  int     _timeActive;
-  
-  sxDynaRect();
-  sxDynaRect(GLfloat x, GLfloat y, GLfloat width, GLfloat height, ofColor colorOn, ofColor colorOff);
-  ~sxDynaRect();
-  
-	//Setup params and call frame buffer allocation
-	void setup(int width,int height);
-  void draw();
-  
-  bool isActive();
-	
-  //Other sub functions
-	void setPos(ofPoint pos2D);
-	ofPoint getPos();
-	void setActive(bool state);
-	void setActive(bool state, int count, ofColor aColor);
-  void setActiveColor(ofColor aColor);
-  void update();
-  
-  	
+  public:
+
+    sxDynaRect();
+    ~sxDynaRect();
+
+    //Setup params and call frame buffer allocation
+    void setup();
+    void draw();
+    void update();
+
+
+    //Other sub functions
+    void setSize(int width, int height);
+    void setPos(ofPoint pos);
+    ofPoint getPos();
+    bool isActive();
+    void bang();
+    void setColorOn(int color);
+    void setColorOff(int color);
+    void setDuration(int duration);
+    void setId(int id);
+    void loadMovie();
+
+    int _width;
+    int _height;
+    ofPoint _pos;
+    int _colorOn;
+    int _colorOff;
+    int     _duration;
+    int     _startTime;
+    int _id;
+
+    ofVideoPlayer _movie;
 };
 
 #endif

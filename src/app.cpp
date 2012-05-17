@@ -46,8 +46,18 @@ void App::setup(){
   
   
   
-  for (int i = 0; i < 960; i+=50){
-    _steps.push_back(sxDynaRect(0, 960-i, 1280, 50, ofColor(255,0,0), ofColor(255,0,255)) );
+  int stairWidth = ofGetWidth();
+  int stairHeight = ofGetHeight()/17;
+
+  _stairs.resize(17);
+  for (int i = 0; i < 17; i++){
+    sxDynaRect *stair = new sxDynaRect();
+    stair->setup();
+    stair->setPos(ofPoint(0, (16-i)*stairHeight));
+    stair->setSize(stairWidth, stairHeight);
+    stair->setId(i);
+    stair->loadMovie();
+    _stairs[i] = stair;
   }
 
   
@@ -62,7 +72,7 @@ void App::checkForOscMessages(){
     if (m.getAddress() == "/ballroom/bounce/"){
       int stair = m.getArgAsInt32(0);
       cout << "A ball hit stair #" << stair << endl;
-      setSteps(stair);
+      _stairs[stair]->bang();
     }
   }
 }
@@ -71,26 +81,9 @@ void App::checkForOscMessages(){
 void App::update(){
   checkForOscMessages();
   _movie.update();
-  list<sxDynaRect>::iterator it =_steps.begin();
-  while(it!=_steps.end()) {
-    it->update();
-    ++it;
+  for (unsigned int i = 0; i < _stairs.size(); i++){
+    _stairs[i]->update();
   }
-
-}
-
-void App::setSteps(int num){
-  list<sxDynaRect>::iterator it =_steps.begin();
-  int cpt = 0;
-  while(it!=_steps.end()) {
-    if(cpt == num){
-      it->setActiveColor(it->_colorOn);
-      it->setActive(true);
-    }
-    ++it;
-    cpt++;
-  }
-
 }
 
 //--------------------------------------------------------------
@@ -102,12 +95,11 @@ void App::draw(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //ofEnableAlphaBlending();
     //ofDisableAlphaBlending();
-    list<sxDynaRect>::iterator it =_steps.begin();
-    while(it!=_steps.end()) {
-      it->draw();
-      ++it;
+    for (unsigned int i = 0; i < _stairs.size(); i++){
+      _stairs[i]->draw();
     }
-  
+    //ofSetHexColor(0xFF0099);
+    //ofRect(200, 200, 200, 200);
   /*ofSetHexColor(0xFF0000);
 	for (int i = 0;i < 480;i+=30){
 		ofRect(0, ofGetFrameNum()%30+i, 640, 10);
@@ -139,16 +131,10 @@ void App::keyPressed(int key){
 	if (key == 'f'){
     ofxFensterManager::get()->getPrimaryWindow()->toggleFullscreen();
   }
-  if  (key == 'h'){
-    cout << "Active" << endl;
-    setSteps(ofRandom(17));  
-  }
   if  (key == 'j'){
     cout << "All Active" << endl;
-    list<sxDynaRect>::iterator it =_steps.begin();
-    while(it!=_steps.end()) {
-      it->setActive(true,5000,ofColor(ofRandom(255), ofRandom(255), ofRandom(255)));
-      ++it;
+    for (unsigned int i = 0; i < _stairs.size(); i++){
+      _stairs[i]->bang();
     }
   }
 }

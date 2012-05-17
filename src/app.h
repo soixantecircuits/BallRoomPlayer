@@ -26,7 +26,6 @@ class App : public ofBaseApp{
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-    void setSteps(int num);
 
     void checkForOscMessages();
   
@@ -41,5 +40,5 @@ class App : public ofBaseApp{
     ofxMpplrController  _controller_mapping;
     ofxMpplrScreen      _buffer_map;
   
-    list<sxDynaRect>    _steps;
+    vector<sxDynaRect*>    _stairs;
 };

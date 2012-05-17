@@ -52,5 +52,5 @@ Thumbs.db
 xcuserdata/
 .DS_Store
 
-*.mov
+# *.mov
 
