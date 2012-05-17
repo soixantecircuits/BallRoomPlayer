@@ -3,51 +3,12 @@
 #include "ofMain.h"
 #include "ofxOsc.h"
 #include "ofxMpplr.h"
-#include "ofxFensterManager.h"
 #ifdef TARGET_OSX
 #include "ofxAlphaVideoPlayer.h"
 #endif
 #include "sxDynaRect.h"
 #include <list>
 
-
-class boxWindow: public ofxFensterListener {
-  public:
-    boxWindow() {
-      _rotX = ofRandom(-20, 20);
-      _rotY = ofRandom(-10, 10);
-      _buf = NULL;
-    }
-
-    boxWindow(ofxMpplrScreen* buf) {
-      _rotX = ofRandom(-20, 20);
-      _rotY = ofRandom(-10, 10);
-      _buf = buf;
-    }
-
-    void draw(ofxFenster* f) {
-      _buf->drawOutPut(0, 0, f->getWidth(), f->getHeight());
-    }
-
-    void mouseMoved(int x, int y) {
-      _rotY = ofMap(x, 0, ofGetWidth(), -20, 20);
-      _rotX = ofMap(y, 0, ofGetHeight(), 60, -60);
-    }
-
-    void keyReleased(int key, ofxFenster* f){
-      if(key=='f'){
-        f->toggleFullscreen();
-      }
-    }
-
-    void assignMpplrScreenBuffer(ofxMpplrScreen *buffer){
-      _buf = buffer;
-    }
-
-    ofxMpplrScreen* _buf;
-    float _rotX;
-    float _rotY;
-};
 
 class App : public ofBaseApp{
 
@@ -69,17 +30,16 @@ class App : public ofBaseApp{
 
     void checkForOscMessages();
   
-    ofxOscReceiver  receiver;
-    ofVideoPlayer   _Movie;
+    ofxOscReceiver      _receiver;
+    ofVideoPlayer       _movie;
 
 #ifdef TARGET_OSX
-    ofxAlphaVideoPlayer      _Incrust;
+    ofxAlphaVideoPlayer _incrust;
 #else
-    ofVideoPlayer _Incrust;
+    ofVideoPlayer       _incrust;
 #endif
-    ofxMpplrController con;
-    ofxMpplrScreen buf;
+    ofxMpplrController  _controller_mapping;
+    ofxMpplrScreen      _buffer_map;
   
-  list<sxDynaRect> _steps;
-
+    list<sxDynaRect>    _steps;
 };

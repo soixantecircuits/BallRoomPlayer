@@ -1,4 +1,7 @@
 #include "app.h"
+#include "ofxFensterManager.h"
+#include "windowOut.h"
+
 #define PORT 12444
 
 
@@ -11,24 +14,30 @@ void App::setup(){
 	
   
   //Setup OSC
-  receiver.setup( PORT);  
+  _receiver.setup( PORT);  
   
 	//ofxMpplr Initialize
-	buf.setup(1280, 960);
-	con.setup(&buf);
-	buf.LoadXML(0);
+	_buffer_map.setup(1280, 960);
+	_controller_mapping.setup(&_buffer_map);
+	_buffer_map.LoadXML(0);
   
   ofxFenster* win=ofxFensterManager::get()->createFenster(1280, 0, 1280, 960, OF_WINDOW);
-  win->addListener(new boxWindow(&buf));
+  win->setWindowTitle("Ballroom render view");
+  win->addListener(new WindowOut(&_buffer_map, "default"));
   win->setBackgroundColor(0,0, 0);
+
+  ofxFenster* win2=ofxFensterManager::get()->createFenster(1280, 0, 1280, 960, OF_WINDOW);
+  win2->setWindowTitle("Ballroom mapper view");
+  win2->addListener(new WindowOut(&_buffer_map, "mapper"));
+  win2->setBackgroundColor(0,0, 0);
   
-  _Movie.loadMovie("movies/anim_marche.mov");
-  _Movie.setVolume(0);
-  _Movie.play();
-  _Movie.setLoopState(OF_LOOP_NORMAL);
+  _movie.loadMovie("movies/anim_marche.mov");
+  _movie.setVolume(0);
+  _movie.play();
+  _movie.setLoopState(OF_LOOP_NORMAL);
   
   #ifdef TARGET_LINUX
-    _Incrust.setPixelFormat(OF_PIXELS_BGRA);
+    _incrust.setPixelFormat(OF_PIXELS_BGRA);
   #endif
   
   
@@ -43,9 +52,9 @@ void App::setup(){
 
 //--------------------------------------------------------------
 void App::checkForOscMessages(){
-  while (receiver.hasWaitingMessages()){
+  while (_receiver.hasWaitingMessages()){
     ofxOscMessage m;
-    receiver.getNextMessage(&m);
+    _receiver.getNextMessage(&m);
     if (m.getAddress() == "/ballroom/bounce/"){
       int stair = m.getArgAsInt32(0);
       cout << "A ball hit stair #" << stair << endl;
@@ -57,7 +66,7 @@ void App::checkForOscMessages(){
 //--------------------------------------------------------------
 void App::update(){
   checkForOscMessages();
-  _Movie.update();
+  _movie.update();
   list<sxDynaRect>::iterator it =_steps.begin();
   while(it!=_steps.end()) {
     it->update();
@@ -84,7 +93,7 @@ void App::setSteps(int num){
 void App::draw(){
 	
 	//You can draw anything between Begin(); and End();
-	buf.Begin();
+	_buffer_map.Begin();
     glClearColor(0, 0, 0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //ofEnableAlphaBlending();
@@ -101,19 +110,19 @@ void App::draw(){
 	}*/
 
 
-	buf.End();
+	_buffer_map.End();
 		
 	ofSetHexColor(0xFFFFFF);
 	ofBackground(0, 0, 0);
 
 	//Monitor out control (deform)
-	buf.draw(640, 0, 640, 480);
+	//_buffer_map.draw(640, 0, 640, 480);
 	
 	//Source out control
-	buf.drawBuffer(0, 0, 640, 480);
+	_buffer_map.drawBuffer(1, 1, 800, 600);
 	
 	//ofxMpplrController
-	con.draw(50, 500);
+	_controller_mapping.draw(50, 650);
 	
 }
 

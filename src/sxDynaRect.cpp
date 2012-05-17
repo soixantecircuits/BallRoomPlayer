@@ -34,7 +34,6 @@ void sxDynaRect::setup(int width, int height){
 
 void sxDynaRect::update(){
   if(isActive()){
-    //_activeColor.set(_colorOn);
     _timeActive--;
     
     if(_timeActive < 0){
@@ -52,7 +51,6 @@ bool sxDynaRect::isActive(){
 
 void sxDynaRect::draw(){
   ofSetColor(_activeColor);
- // ofSetHexColor(0xFF0000);
 
   //cout << "_activeColor.getHex() : " << _activeColor.getHex() << endl;
   ofRect(_pos, _width, _height);
