@@ -2,6 +2,10 @@
 #include "ofxFensterManager.h"
 #include "windowOut.h"
 
+#define PANEL_TEX	0x00
+#define PANEL_VER	0x01
+#define PANEL_NONE	0x02
+
 #define PORT 12444
 
 
@@ -119,7 +123,11 @@ void App::draw(){
 	//_buffer_map.draw(640, 0, 640, 480);
 	
 	//Source out control
-	_buffer_map.drawBuffer(1, 1, 800, 600);
+  /**************************************/
+  //Need to be fixed, if an other coordinates are given, the display is offset
+  /**************************************/
+  
+	_buffer_map.drawBuffer(0, 0, 800, 600);
 	
 	//ofxMpplrController
 	_controller_mapping.draw(50, 650);

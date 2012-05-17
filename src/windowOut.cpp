@@ -7,7 +7,9 @@
 //
 
 #include "windowOut.h"
-
+#define PANEL_TEX	0x00
+#define PANEL_VER	0x01
+#define PANEL_NONE	0x02
 
 
 WindowOut::WindowOut() {
@@ -29,6 +31,12 @@ void WindowOut::draw(ofxFenster* fenster) {
 }
   
 void WindowOut::mouseMoved(int x, int y) {
+  if(_type_of_display == "mapper"){
+    _buffer_screen->setMode(PANEL_VER);
+    _buffer_screen->setMouseXY(x, y);
+  }else {
+    _buffer_screen->setMode(PANEL_NONE);
+  }
 }
   
 void WindowOut::keyReleased(int key, ofxFenster* fenster){
