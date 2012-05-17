@@ -35,6 +35,8 @@ class sxDynaRect{
     void setColorOff(int color);
     void setDuration(int duration);
     void setId(int id);
+    void loadMovie();
+
     int _width;
     int _height;
     ofPoint _pos;
@@ -44,6 +46,7 @@ class sxDynaRect{
     int     _startTime;
     int _id;
 
+    ofVideoPlayer _movie;
 };
 
 #endif

@@ -56,6 +56,7 @@ void App::setup(){
     stair->setPos(ofPoint(0, (16-i)*stairHeight));
     stair->setSize(stairWidth, stairHeight);
     stair->setId(i);
+    stair->loadMovie();
     _stairs[i] = stair;
   }
 

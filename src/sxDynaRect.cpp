@@ -30,6 +30,21 @@ void sxDynaRect::setSize(int width, int height){
 
 //--------------------------------------------------------------
 void sxDynaRect::update(){
+  if (_movie.isLoaded()){
+    _movie.update();
+  }
+}
+
+//--------------------------------------------------------------
+void sxDynaRect::loadMovie(){
+  int id = _id + 1;
+  string path = "movies/marches/" + ofToString(id) + ".mov";
+  if ( id < 10) {
+    path = "movies/marches/0" + ofToString(id) + ".mov";
+  }
+  cout << "loading file: " << path << endl;
+  _movie.loadMovie(path);
+  _movie.setLoopState(OF_LOOP_NONE);
 }
 
 //--------------------------------------------------------------
@@ -39,12 +54,16 @@ bool sxDynaRect::isActive(){
 
 //--------------------------------------------------------------
 void sxDynaRect::draw(){
-  if (isActive()){
-    ofSetHexColor(_colorOn);
+  if (!_movie.isLoaded()){
+    if (isActive()){
+      ofSetHexColor(_colorOn);
+    } else {
+      ofSetHexColor(_colorOff);
+    }
+    ofRect(_pos.x, _pos.y, _width, _height);
   } else {
-    ofSetHexColor(_colorOff);
+    _movie.draw(_pos.x, _pos.y, _width, _height);
   }
-  ofRect(_pos.x, _pos.y, _width, _height);
 }
 
 //--------------------------------------------------------------
@@ -79,7 +98,12 @@ void sxDynaRect::setDuration(int duration){
 
 //--------------------------------------------------------------
 void sxDynaRect::bang(){
-  _startTime = ofGetElapsedTimeMillis();
+  if (_movie.isLoaded()){
+    _movie.firstFrame();
+    _movie.play();
+  } else {
+    _startTime = ofGetElapsedTimeMillis();
+  }
 }
 
 //--------------------------------------------------------------
