@@ -37,7 +37,7 @@ void sxDynaRect::update(){
 
 //--------------------------------------------------------------
 void sxDynaRect::loadMovie(){
-  int id = _id + 1;
+  int id = (_id % 4) + 1;
   string path = "movies/marches/" + ofToString(id) + ".mov";
   if ( id < 10) {
     path = "movies/marches/0" + ofToString(id) + ".mov";

@@ -98,8 +98,8 @@ void App::draw(){
     for (unsigned int i = 0; i < _stairs.size(); i++){
       _stairs[i]->draw();
     }
-    ofSetHexColor(0xFF0099);
-    ofRect(200, 200, 200, 200);
+    //ofSetHexColor(0xFF0099);
+    //ofRect(200, 200, 200, 200);
   /*ofSetHexColor(0xFF0000);
 	for (int i = 0;i < 480;i+=30){
 		ofRect(0, ofGetFrameNum()%30+i, 640, 10);
