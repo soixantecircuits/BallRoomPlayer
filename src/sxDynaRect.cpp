@@ -44,11 +44,6 @@ void sxDynaRect::draw(){
   } else {
     ofSetHexColor(_colorOff);
   }
-  cout << "_pos.x: " << _pos.x 
-   << " _pos.y: " << _pos.y
-   << " width: " << _width
-   << " color: " << _colorOn 
-   << " height: " << _height << endl;
   ofRect(_pos.x, _pos.y, _width, _height);
 }
 
