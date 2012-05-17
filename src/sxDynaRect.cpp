@@ -9,75 +9,85 @@
 #include <iostream>
 #include "sxDynaRect.h"
 
+//--------------------------------------------------------------
 sxDynaRect::sxDynaRect(){
 
 }
 
-sxDynaRect::sxDynaRect(GLfloat x, GLfloat y, GLfloat width, GLfloat height, ofColor colorOn, ofColor colorOff){
-  _pos.x = x;
-  _pos.y = y;
-  _width = width;
-  _height = height;
-  _colorOn.set(colorOn);
-  _colorOff.set(colorOff);
-  _isActive = false;
-  _activeColor.set(colorOff);
-  _timeActive = 50;
+//--------------------------------------------------------------
+void sxDynaRect::setup(){
+  _startTime = 0;
+  _duration = 500;
+  _colorOn = 0xFF0000;
+  _colorOff = 0xFFFF00;
 }
 
-
-void sxDynaRect::setup(int width, int height){
+//--------------------------------------------------------------
+void sxDynaRect::setSize(int width, int height){
   _width = width;
   _height = height;
 }
 
-
+//--------------------------------------------------------------
 void sxDynaRect::update(){
-  if(isActive()){
-    _timeActive--;
-    
-    if(_timeActive < 0){
-      _timeActive = 50;
-      _isActive = false;
-    }
-  }else{
-    _activeColor.set(_colorOff);
-  }
 }
 
+//--------------------------------------------------------------
 bool sxDynaRect::isActive(){
-  return _isActive;
+  return ofGetElapsedTimeMillis() - _startTime < _duration;
 }
 
+//--------------------------------------------------------------
 void sxDynaRect::draw(){
-  ofSetColor(_activeColor);
-
-  //cout << "_activeColor.getHex() : " << _activeColor.getHex() << endl;
-  ofRect(_pos, _width, _height);
+  if (isActive()){
+    ofSetHexColor(_colorOn);
+  } else {
+    ofSetHexColor(_colorOff);
+  }
+  cout << "_pos.x: " << _pos.x 
+   << " _pos.y: " << _pos.y
+   << " width: " << _width
+   << " color: " << _colorOn 
+   << " height: " << _height << endl;
+  ofRect(_pos.x, _pos.y, _width, _height);
 }
 
-void sxDynaRect::setPos(ofPoint pos2D){
-  
+//--------------------------------------------------------------
+void sxDynaRect::setId(int id){
+  _id = id;
 }
 
+//--------------------------------------------------------------
+void sxDynaRect::setPos(ofPoint pos){
+  _pos = pos;
+}
+
+//--------------------------------------------------------------
 ofPoint sxDynaRect::getPos(){
-  
+ return _pos;
 }
 
-void sxDynaRect::setActive(bool state){
-  _isActive = state;
+//--------------------------------------------------------------
+void sxDynaRect::setColorOn(int color){
+  _colorOn =  color;
 }
 
-void sxDynaRect::setActive(bool state, int count, ofColor aColor){
-  _timeActive = count;
-  _isActive = state;
-  _activeColor.set(aColor);
+//--------------------------------------------------------------
+void sxDynaRect::setColorOff(int color){
+  _colorOff = color;
 }
 
-void sxDynaRect::setActiveColor(ofColor aColor){
-  _activeColor.set(aColor);
+//--------------------------------------------------------------
+void sxDynaRect::setDuration(int duration){
+  _duration = duration;
 }
 
+//--------------------------------------------------------------
+void sxDynaRect::bang(){
+  _startTime = ofGetElapsedTimeMillis();
+}
+
+//--------------------------------------------------------------
 sxDynaRect::~sxDynaRect(){
 
 }
