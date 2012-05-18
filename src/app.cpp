@@ -6,7 +6,8 @@
 #define PANEL_NONE	0x02
 
 #define PORT 12444
-
+#define WIDTH 640
+#define HEIGHT 480
 
 
 //--------------------------------------------------------------
@@ -20,16 +21,16 @@ void App::setup(){
   _receiver.setup( PORT);  
   
 	//ofxMpplr Initialize
-	_buffer_map.setup(1280, 960);
+	_buffer_map.setup(WIDTH, HEIGHT);
 	_controller_mapping.setup(&_buffer_map);
-	_buffer_map.LoadXML(0);
+	//_buffer_map.LoadXML(0);
   
-  ofxFenster* win=ofxFensterManager::get()->createFenster(1280, 0, 1280, 960, OF_WINDOW);
+  ofxFenster* win=ofxFensterManager::get()->createFenster(WIDTH, 0, WIDTH, HEIGHT, OF_WINDOW);
   win->setWindowTitle("Ballroom render view");
   win->addListener(new WindowOut(&_buffer_map, "default"));
   win->setBackgroundColor(0,0, 0);
 
-  _mapperView = ofxFensterManager::get()->createFenster(400, 0, 1280, 960, OF_WINDOW);
+  _mapperView = ofxFensterManager::get()->createFenster(400, 0, WIDTH, HEIGHT, OF_WINDOW);
   _mapperView->setWindowTitle("Ballroom mapper view");
   _mapperView->addListener(new WindowOut(&_buffer_map, "mapper"));
   _mapperView->setBackgroundColor(0,0, 0);
@@ -46,37 +47,38 @@ void App::setup(){
   
   _backgroundImage.loadImage("data/bgImage.jpg");
   
-  int stairWidth = ofGetWidth();
-  float stairHeight = ofGetHeight()/34.;
-  float correctedStairHeight = 1.65*stairHeight;// + stairHeight/3.;
+  int stairWidth = WIDTH;
+  float stairHeight = HEIGHT/17.;
 
   _stairs.resize(17);
-  float lastPosition = 460;
   for (int i = 0; i < 17; i++){
     sxDynaRect *stair = new sxDynaRect();
     stair->setup();
-    stair->setPos(ofPoint(0, lastPosition - correctedStairHeight));
-    stair->setSize(stairWidth, correctedStairHeight);
-    lastPosition = lastPosition - correctedStairHeight;
-    correctedStairHeight -= (1.45*stairHeight)/17.;
+    stair->setPos(ofPoint(0, (16-i)*stairHeight));
+    stair->setSize(stairWidth, stairHeight);
     stair->setId(i);
+    int rainbow = 0;
     if (i % 4 == 0){
-      stair->setColorOn(0x00ffff);
+      rainbow = 0x00ffff;
     }
     if (i % 4 == 1){
-      stair->setColorOn(0xff0000);
+      rainbow = 0xff0000;
     }
     if (i % 4 == 2){
-      stair->setColorOn(0xffff00);
+      rainbow = 0xffff00;
     }
     if (i % 4 == 3){
-      stair->setColorOn(0xff0099);
+      rainbow = 0xff0099;
     }
+    stair->setColorOn(rainbow);
+    stair->setColorOff(0x000000);
+    /*
     if ( i < 4){
       stair->setColorOff(0xffff00);
     } else {
       stair->setColorOff(0x000000);
     }
+    */
 
     //stair->loadMovie();
     _stairs[i] = stair;
@@ -107,7 +109,7 @@ void App::update(){
     _stairs[i]->update();
   }
   //resize window
-  _mapperView->setWindowShape(_mapperView->getHeight()/960.*1280, _mapperView->getHeight());
+  _mapperView->setWindowShape(_mapperView->getHeight()/HEIGHT*WIDTH, _mapperView->getHeight());
 }
 
 //--------------------------------------------------------------
@@ -119,7 +121,7 @@ void App::draw(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //ofEnableAlphaBlending();
     //ofDisableAlphaBlending();
-    _backgroundImage.draw(0, 0, 1280, 960);
+    _backgroundImage.draw(0, 0, WIDTH, HEIGHT);
     for (unsigned int i = 0; i < _stairs.size(); i++){
       _stairs[i]->draw();
     }
