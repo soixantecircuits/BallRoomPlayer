@@ -7,6 +7,7 @@
 #include "ofxAlphaVideoPlayer.h"
 #endif
 #include "sxDynaRect.h"
+#include "ofxFensterManager.h"
 #include <list>
 
 
@@ -28,6 +29,8 @@ class App : public ofBaseApp{
     void gotMessage(ofMessage msg);
 
     void checkForOscMessages();
+
+    ofxFenster* _mapperView;
   
     ofxOscReceiver      _receiver;
     ofVideoPlayer       _movie;

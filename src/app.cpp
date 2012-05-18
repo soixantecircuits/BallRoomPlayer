@@ -1,5 +1,4 @@
 #include "app.h"
-#include "ofxFensterManager.h"
 #include "windowOut.h"
 
 #define PANEL_TEX	0x00
@@ -30,10 +29,10 @@ void App::setup(){
   win->addListener(new WindowOut(&_buffer_map, "default"));
   win->setBackgroundColor(0,0, 0);
 
-  ofxFenster* win2=ofxFensterManager::get()->createFenster(400, 0, 1280, 960, OF_WINDOW);
-  win2->setWindowTitle("Ballroom mapper view");
-  win2->addListener(new WindowOut(&_buffer_map, "mapper"));
-  win2->setBackgroundColor(0,0, 0);
+  _mapperView = ofxFensterManager::get()->createFenster(400, 0, 1280, 960, OF_WINDOW);
+  _mapperView->setWindowTitle("Ballroom mapper view");
+  _mapperView->addListener(new WindowOut(&_buffer_map, "mapper"));
+  _mapperView->setBackgroundColor(0,0, 0);
   
   _movie.loadMovie("movies/anim_marche.mov");
   _movie.setVolume(0);
@@ -107,6 +106,8 @@ void App::update(){
   for (unsigned int i = 0; i < _stairs.size(); i++){
     _stairs[i]->update();
   }
+  //resize window
+  _mapperView->setWindowShape(_mapperView->getHeight()/960.*1280, _mapperView->getHeight());
 }
 
 //--------------------------------------------------------------
