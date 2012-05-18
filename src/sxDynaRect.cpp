@@ -44,6 +44,7 @@ void sxDynaRect::loadMovie(){
   }
   cout << "loading file: " << path << endl;
   _movie.loadMovie(path);
+  //_movie.setLoopState(OF_LOOP_NORMAL);
   _movie.setLoopState(OF_LOOP_NONE);
   _movie.play();
   _movie.setPaused(true);

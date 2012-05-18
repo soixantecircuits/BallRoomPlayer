@@ -37,6 +37,7 @@ class App : public ofBaseApp{
 #else
     ofVideoPlayer       _incrust;
 #endif
+    ofImage _backgroundImage;
     ofxMpplrController  _controller_mapping;
     ofxMpplrScreen      _buffer_map;
   

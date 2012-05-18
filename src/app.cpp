@@ -30,7 +30,7 @@ void App::setup(){
   win->addListener(new WindowOut(&_buffer_map, "default"));
   win->setBackgroundColor(0,0, 0);
 
-  ofxFenster* win2=ofxFensterManager::get()->createFenster(1280, 0, 1280, 960, OF_WINDOW);
+  ofxFenster* win2=ofxFensterManager::get()->createFenster(400, 0, 1280, 960, OF_WINDOW);
   win2->setWindowTitle("Ballroom mapper view");
   win2->addListener(new WindowOut(&_buffer_map, "mapper"));
   win2->setBackgroundColor(0,0, 0);
@@ -45,18 +45,41 @@ void App::setup(){
   #endif
   
   
+  _backgroundImage.loadImage("data/bgImage.jpg");
   
   int stairWidth = ofGetWidth();
-  int stairHeight = ofGetHeight()/17;
+  float stairHeight = ofGetHeight()/34.;
+  float correctedStairHeight = 1.65*stairHeight;// + stairHeight/3.;
 
   _stairs.resize(17);
+  float lastPosition = 460;
   for (int i = 0; i < 17; i++){
     sxDynaRect *stair = new sxDynaRect();
     stair->setup();
-    stair->setPos(ofPoint(0, (16-i)*stairHeight));
-    stair->setSize(stairWidth, stairHeight);
+    stair->setPos(ofPoint(0, lastPosition - correctedStairHeight));
+    stair->setSize(stairWidth, correctedStairHeight);
+    lastPosition = lastPosition - correctedStairHeight;
+    correctedStairHeight -= (1.45*stairHeight)/17.;
     stair->setId(i);
-    stair->loadMovie();
+    if (i % 4 == 0){
+      stair->setColorOn(0x00ffff);
+    }
+    if (i % 4 == 1){
+      stair->setColorOn(0xff0000);
+    }
+    if (i % 4 == 2){
+      stair->setColorOn(0xffff00);
+    }
+    if (i % 4 == 3){
+      stair->setColorOn(0xff0099);
+    }
+    if ( i < 4){
+      stair->setColorOff(0xffff00);
+    } else {
+      stair->setColorOff(0x000000);
+    }
+
+    //stair->loadMovie();
     _stairs[i] = stair;
   }
 
@@ -95,6 +118,7 @@ void App::draw(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //ofEnableAlphaBlending();
     //ofDisableAlphaBlending();
+    _backgroundImage.draw(0, 0, 1280, 960);
     for (unsigned int i = 0; i < _stairs.size(); i++){
       _stairs[i]->draw();
     }
@@ -134,6 +158,7 @@ void App::keyPressed(int key){
   if  (key == 'j'){
     cout << "All Active" << endl;
     for (unsigned int i = 0; i < _stairs.size(); i++){
+      //_stairs[i]->setDuration(10000);
       _stairs[i]->bang();
     }
   }
