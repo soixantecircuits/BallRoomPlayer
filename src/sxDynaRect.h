@@ -31,6 +31,7 @@ class sxDynaRect{
     ofPoint getPos();
     bool isActive();
     void bang();
+    void bangDelay(int delay);
     void setColorOn(int color);
     void setColorOff(int color);
     void setDuration(int duration);

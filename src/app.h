@@ -30,9 +30,11 @@ class App : public ofBaseApp{
 
     void checkForOscMessages();
 
+    void bangStair(int stair);
     ofxFenster* _mapperView;
   
     ofxOscReceiver      _receiver;
+    ofxOscSender        _sender;
     ofVideoPlayer       _movie;
 
 #ifdef TARGET_OSX

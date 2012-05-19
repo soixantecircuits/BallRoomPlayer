@@ -9,6 +9,7 @@
 #define WIDTH 640
 #define HEIGHT 480
 
+#define DASHBOARDHOST "localhost"//"192.168.1.103"
 
 //--------------------------------------------------------------
 void App::setup(){
@@ -19,16 +20,19 @@ void App::setup(){
   
   //Setup OSC
   _receiver.setup( PORT);  
+	// open an outgoing connection to HOST:PORT
+	_sender.setup( DASHBOARDHOST, 12045 );
   
 	//ofxMpplr Initialize
 	_buffer_map.setup(WIDTH, HEIGHT);
 	_controller_mapping.setup(&_buffer_map);
-	//_buffer_map.LoadXML(0);
+	_buffer_map.LoadXML(0);
   
-  ofxFenster* win=ofxFensterManager::get()->createFenster(WIDTH, 0, WIDTH, HEIGHT, OF_WINDOW);
+  ofxFenster* win=ofxFensterManager::get()->createFenster(2000, 0, WIDTH, HEIGHT, OF_WINDOW);
   win->setWindowTitle("Ballroom render view");
   win->addListener(new WindowOut(&_buffer_map, "default"));
   win->setBackgroundColor(0,0, 0);
+  //win->setFullscreen(true);
 
   _mapperView = ofxFensterManager::get()->createFenster(400, 0, WIDTH, HEIGHT, OF_WINDOW);
   _mapperView->setWindowTitle("Ballroom mapper view");
@@ -96,9 +100,23 @@ void App::checkForOscMessages(){
     if (m.getAddress() == "/ballroom/bounce/"){
       int stair = m.getArgAsInt32(0);
       cout << "A ball hit stair #" << stair << endl;
-      _stairs[stair]->bang();
+      bangStair(stair);
     }
   }
+}
+
+//--------------------------------------------------------------
+void App::bangStair(int stair){
+  for (unsigned int i = stair; i < _stairs.size(); i++){
+    _stairs[i]->setDuration(40);
+    _stairs[i]->bangDelay(10*(i-stair));
+  }
+  
+  //send message
+  ofxOscMessage m;
+  m.setAddress("/ballroom/bounce/");
+  m.addIntArg(stair);
+  _sender.sendMessage(m);
 }
 
 //--------------------------------------------------------------
@@ -158,12 +176,42 @@ void App::keyPressed(int key){
 	if (key == 'f'){
     ofxFensterManager::get()->getPrimaryWindow()->toggleFullscreen();
   }
-  if  (key == 'j'){
+  else if  (key == 'j'){
     cout << "All Active" << endl;
     for (unsigned int i = 0; i < _stairs.size(); i++){
       //_stairs[i]->setDuration(10000);
       _stairs[i]->bang();
     }
+  }
+  else if (key == '1'){
+    bangStair(1);
+  }
+  else if (key == '2'){
+    bangStair(2);
+  }
+  else if (key == '3'){
+    bangStair(3);
+  }
+  else if (key == '4'){
+    bangStair(4);
+  }
+  else if (key == '5'){
+    bangStair(5);
+  }
+  else if (key == '6'){
+    bangStair(6);
+  }
+  else if (key == '7'){
+    bangStair(7);
+  }
+  else if (key == '8'){
+    bangStair(8);
+  }
+  else if (key == '9'){
+    bangStair(9);
+  }
+  else if (key == '0'){
+    bangStair(0);
   }
 }
 

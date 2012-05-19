@@ -52,7 +52,8 @@ void sxDynaRect::loadMovie(){
 
 //--------------------------------------------------------------
 bool sxDynaRect::isActive(){
-  return ofGetElapsedTimeMillis() - _startTime < _duration;
+  return (ofGetElapsedTimeMillis() - _startTime < _duration)
+          && (ofGetElapsedTimeMillis() - _startTime > 0);
 }
 
 //--------------------------------------------------------------
@@ -106,6 +107,16 @@ void sxDynaRect::bang(){
     _movie.play();
   } else {
     _startTime = ofGetElapsedTimeMillis();
+  }
+}
+
+//--------------------------------------------------------------
+void sxDynaRect::bangDelay(int delay){
+  if (_movie.isLoaded()){
+    _movie.firstFrame();
+    _movie.play();
+  } else {
+    _startTime = ofGetElapsedTimeMillis() + delay;
   }
 }
 
