@@ -9,7 +9,8 @@
 #define WIDTH 640
 #define HEIGHT 480
 
-#define DASHBOARDHOST "localhost"//"192.168.1.103"
+//#define DASHBOARDHOST "localhost"//"192.168.1.103"
+#define DASHBOARDHOST "192.168.1.101"
 
 //--------------------------------------------------------------
 void App::setup(){
@@ -108,8 +109,8 @@ void App::checkForOscMessages(){
 //--------------------------------------------------------------
 void App::bangStair(int stair){
   for (unsigned int i = stair; i < _stairs.size(); i++){
-    _stairs[i]->setDuration(40);
-    _stairs[i]->bangDelay(10*(i-stair));
+    _stairs[i]->setDuration(200);
+    _stairs[i]->bangDelay(20*(i-stair));
   }
   
   //send message
