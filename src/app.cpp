@@ -9,8 +9,8 @@
 #define WIDTH 640
 #define HEIGHT 480
 
-//#define DASHBOARDHOST "localhost"//"192.168.1.103"
-#define DASHBOARDHOST "192.168.1.101"
+#define DASHBOARDHOST "localhost"//"192.168.1.103"
+//#define DASHBOARDHOST "192.168.1.101"
 
 //--------------------------------------------------------------
 void App::setup(){
@@ -127,6 +127,14 @@ void App::checkForOscMessages(){
 }
 
 //--------------------------------------------------------------
+void App::startTada(){
+  //send message to dashboard
+  ofxOscMessage m;
+  m.setAddress("/ballroom/tada/");
+  _sender.sendMessage(m);
+}
+
+//--------------------------------------------------------------
 void App::startScore(){
   _scoreSound.play();
   gameOver();
@@ -195,7 +203,12 @@ void App::updateState(){
     }
   }
   else if (_stateMachine == BR_SCORE){
-    if (ofGetElapsedTimeMillis() - _startOfStateTime > 8000){
+    if (ofGetElapsedTimeMillis() - _startOfStateTime > 1250){
+      setState(BR_TADA);
+    }
+  }
+  else if (_stateMachine == BR_TADA){
+    if (ofGetElapsedTimeMillis() - _startOfStateTime > 4000){
       setState(BR_PLAYING);
     }
   }
@@ -210,6 +223,9 @@ void App::setState(gameState state){
   }
   else if (state == BR_SCORE){
     startScore();
+  }
+  else if (state == BR_TADA){
+    startTada();
   }
 }
 

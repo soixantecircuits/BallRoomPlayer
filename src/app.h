@@ -14,6 +14,7 @@ enum gameState{
   BR_PLAYING=0x01,
   BR_BOUNCENOTGOOD=0x02,
   BR_SCORE=0x03,
+  BR_TADA=0x04,
 };
 
 
@@ -40,6 +41,7 @@ class App : public ofBaseApp{
     void gameOver();
     void startPlaying();
     void startScore();
+    void startTada();
     void setState(gameState state);
     void updateState();
     ofxFenster* _mapperView;
