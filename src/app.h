@@ -10,6 +10,12 @@
 #include "ofxFensterManager.h"
 #include <list>
 
+enum gameState{
+  BR_PLAYING=0x01,
+  BR_BOUNCENOTGOOD=0x02,
+  BR_SCORE=0x03,
+};
+
 
 class App : public ofBaseApp{
 
@@ -31,6 +37,11 @@ class App : public ofBaseApp{
     void checkForOscMessages();
 
     void bangStair(int stair);
+    void gameOver();
+    void startPlaying();
+    void startScore();
+    void setState(gameState state);
+    void updateState();
     ofxFenster* _mapperView;
   
     ofxOscReceiver      _receiver;
@@ -50,5 +61,9 @@ class App : public ofBaseApp{
 
 		ofSoundPlayer  _bgSound;
 		ofSoundPlayer  _bounceSound;
+		ofSoundPlayer  _bounceNotGoodSound;
 		ofSoundPlayer  _scoreSound;
+		ofSoundPlayer  _startSound;
+    gameState _stateMachine;
+    int _startOfStateTime;
 };

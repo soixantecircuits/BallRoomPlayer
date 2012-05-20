@@ -36,6 +36,8 @@ class sxDynaRect{
     void setColorOff(int color);
     void setDuration(int duration);
     void setId(int id);
+    void setPermanent(bool permanent);
+    bool isPermanent();
     void loadMovie();
 
     int _width;
@@ -46,6 +48,7 @@ class sxDynaRect{
     int     _duration;
     int     _startTime;
     int _id;
+    bool _bPermanent;
 
     ofVideoPlayer _movie;
 };

@@ -97,7 +97,20 @@ void App::setup(){
   _bounceSound.setVolume(0.75f);
   _bounceSound.setMultiPlay(true);
   _bounceSound.setLoop(false); 
+  _bounceNotGoodSound.loadSound("sounds/rebondPasBon.wav");
+  _bounceNotGoodSound.setVolume(0.75f);
+  _bounceNotGoodSound.setMultiPlay(false);
+  _bounceNotGoodSound.setLoop(false); 
+  _scoreSound.loadSound("sounds/score.wav");
+  _scoreSound.setVolume(0.75f);
+  _scoreSound.setMultiPlay(false);
+  _scoreSound.setLoop(false); 
+  _startSound.loadSound("sounds/start.wav");
+  _startSound.setVolume(0.75f);
+  _startSound.setMultiPlay(false);
+  _startSound.setLoop(false); 
   
+  _stateMachine = BR_PLAYING;
 }
 
 //--------------------------------------------------------------
@@ -114,23 +127,96 @@ void App::checkForOscMessages(){
 }
 
 //--------------------------------------------------------------
-void App::bangStair(int stair){
-  _bounceSound.play(); 
-  for (unsigned int i = stair; i < _stairs.size(); i++){
-    _stairs[i]->setDuration(200);
-    _stairs[i]->bangDelay(20*(i-stair));
+void App::startScore(){
+  _scoreSound.play();
+  gameOver();
+}
+
+//--------------------------------------------------------------
+void App::startPlaying(){
+  for (unsigned int i = 0; i < _stairs.size(); i++){
+      _stairs[i]->setPermanent(false);
   }
-  
-  //send message
+  _startSound.play();
+  //send message to dashboard
   ofxOscMessage m;
-  m.setAddress("/ballroom/bounce/");
-  m.addIntArg(stair);
+  m.setAddress("/ballroom/start/");
   _sender.sendMessage(m);
+}
+
+//--------------------------------------------------------------
+void App::gameOver(){
+  //send message to dashboard
+  ofxOscMessage m;
+  m.setAddress("/ballroom/gameover/");
+  _sender.sendMessage(m);
+}
+
+//--------------------------------------------------------------
+void App::bangStair(int stair){
+  if (_stateMachine == BR_PLAYING){  
+    if (!_stairs[stair]->isPermanent()){
+      _stairs[stair]->setPermanent(true);
+      _bounceSound.play(); 
+      //animation
+      for (unsigned int i = stair; i < _stairs.size(); i++){
+        _stairs[i]->setDuration(200);
+        _stairs[i]->bangDelay(20*(i-stair));
+      }
+      //check if all stairs are permanent
+      bool isFinished = true;
+      for (unsigned int i = 0; i < _stairs.size(); i++){
+        if (!_stairs[i]->isPermanent()){
+          isFinished = false;
+          break;
+        }
+      }
+      if (isFinished){
+        setState(BR_SCORE);
+      }
+      //send message to dashboard
+      ofxOscMessage m;
+      m.setAddress("/ballroom/bounce/");
+      m.addIntArg(stair);
+      _sender.sendMessage(m);
+
+    } else {
+      _bounceNotGoodSound.play(); 
+        setState(BR_BOUNCENOTGOOD);
+    }
+  }
+}
+
+//--------------------------------------------------------------
+void App::updateState(){
+  if (_stateMachine == BR_BOUNCENOTGOOD){
+    if (ofGetElapsedTimeMillis() - _startOfStateTime > 1000){
+      setState(BR_SCORE);
+    }
+  }
+  else if (_stateMachine == BR_SCORE){
+    if (ofGetElapsedTimeMillis() - _startOfStateTime > 8000){
+      setState(BR_PLAYING);
+    }
+  }
+}
+
+//--------------------------------------------------------------
+void App::setState(gameState state){
+  _startOfStateTime = ofGetElapsedTimeMillis();
+  _stateMachine = state;
+  if (state == BR_PLAYING){
+    startPlaying();
+  }
+  else if (state == BR_SCORE){
+    startScore();
+  }
 }
 
 //--------------------------------------------------------------
 void App::update(){
 	ofSoundUpdate();
+  updateState();
   checkForOscMessages();
   _movie.update();
   for (unsigned int i = 0; i < _stairs.size(); i++){

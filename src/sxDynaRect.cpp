@@ -20,6 +20,7 @@ void sxDynaRect::setup(){
   _duration = 500;
   _colorOn = 0xFF0000;
   _colorOff = 0xFFFF00;
+  _bPermanent = false;
 }
 
 //--------------------------------------------------------------
@@ -59,7 +60,7 @@ bool sxDynaRect::isActive(){
 //--------------------------------------------------------------
 void sxDynaRect::draw(){
   if (!_movie.isLoaded()){
-    if (isActive()){
+    if (isActive() || isPermanent()){
       ofSetHexColor(_colorOn);
     } else {
       ofSetHexColor(_colorOff);
@@ -118,6 +119,16 @@ void sxDynaRect::bangDelay(int delay){
   } else {
     _startTime = ofGetElapsedTimeMillis() + delay;
   }
+}
+
+//--------------------------------------------------------------
+void sxDynaRect::setPermanent(bool permanent){
+  _bPermanent = permanent;
+}
+
+//--------------------------------------------------------------
+bool sxDynaRect::isPermanent(){
+  return _bPermanent;
 }
 
 //--------------------------------------------------------------
