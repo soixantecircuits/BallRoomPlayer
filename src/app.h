@@ -47,4 +47,8 @@ class App : public ofBaseApp{
     ofxMpplrScreen      _buffer_map;
   
     vector<sxDynaRect*>    _stairs;
+
+		ofSoundPlayer  _bgSound;
+		ofSoundPlayer  _bounceSound;
+		ofSoundPlayer  _scoreSound;
 };

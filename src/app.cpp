@@ -88,8 +88,15 @@ void App::setup(){
     //stair->loadMovie();
     _stairs[i] = stair;
   }
-
-  
+  _bgSound.loadSound("sounds/2.dub.wav");
+  _bgSound.setVolume(0.5f);
+  _bgSound.setMultiPlay(false);
+  _bgSound.setLoop(true); 
+  _bgSound.play(); 
+  _bounceSound.loadSound("sounds/rebondBon1.wav");
+  _bounceSound.setVolume(0.75f);
+  _bounceSound.setMultiPlay(true);
+  _bounceSound.setLoop(false); 
   
 }
 
@@ -108,6 +115,7 @@ void App::checkForOscMessages(){
 
 //--------------------------------------------------------------
 void App::bangStair(int stair){
+  _bounceSound.play(); 
   for (unsigned int i = stair; i < _stairs.size(); i++){
     _stairs[i]->setDuration(200);
     _stairs[i]->bangDelay(20*(i-stair));
@@ -122,6 +130,7 @@ void App::bangStair(int stair){
 
 //--------------------------------------------------------------
 void App::update(){
+	ofSoundUpdate();
   checkForOscMessages();
   _movie.update();
   for (unsigned int i = 0; i < _stairs.size(); i++){
