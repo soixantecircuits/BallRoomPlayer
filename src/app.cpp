@@ -9,8 +9,8 @@
 #define WIDTH 640
 #define HEIGHT 480
 
-#define DASHBOARDHOST "localhost"//"192.168.1.103"
-//#define DASHBOARDHOST "192.168.1.101"
+//#define DASHBOARDHOST "localhost"//"192.168.1.103"
+#define DASHBOARDHOST "192.168.1.101"
 
 //--------------------------------------------------------------
 void App::setup(){
@@ -89,11 +89,11 @@ void App::setup(){
     _stairs[i] = stair;
   }
   _bgSound.loadSound("sounds/2.dub.wav");
-  _bgSound.setVolume(0.5f);
+  _bgSound.setVolume(0.75f);
   _bgSound.setMultiPlay(false);
   _bgSound.setLoop(true); 
   _bgSound.play(); 
-  _bounceSound.loadSound("sounds/rebondBon1.wav");
+  _bounceSound.loadSound("sounds/rebondBon3.wav");
   _bounceSound.setVolume(0.75f);
   _bounceSound.setMultiPlay(true);
   _bounceSound.setLoop(false); 
@@ -102,7 +102,7 @@ void App::setup(){
   _bounceNotGoodSound.setMultiPlay(false);
   _bounceNotGoodSound.setLoop(false); 
   _scoreSound.loadSound("sounds/score.wav");
-  _scoreSound.setVolume(0.75f);
+  _scoreSound.setVolume(1.0f);
   _scoreSound.setMultiPlay(false);
   _scoreSound.setLoop(false); 
   _startSound.loadSound("sounds/start.wav");
@@ -190,6 +190,7 @@ void App::bangStair(int stair){
 
     } else {
       _bounceNotGoodSound.play(); 
+      _bounceSound.stop(); 
         setState(BR_BOUNCENOTGOOD);
     }
   }
